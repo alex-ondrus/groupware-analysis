@@ -19,7 +19,7 @@ library(caret)
 library(lubridate)
 
 training <- read_csv(
-  "08_PracticalMachineLearning/CourseProject/pml-training.csv",
+  "pml-training.csv",
   na = c("", "NA", "#DIV/0!"),
   guess_max = Inf,
   show_col_types = FALSE
@@ -37,7 +37,7 @@ training <- read_csv(
   )
 
 testing <- read_csv(
-  "08_PracticalMachineLearning/CourseProject/pml-testing.csv",
+  "pml-testing.csv",
   na = c("", "NA", "#DIV/0!"),
   guess_max = Inf,
   show_col_types = FALSE
@@ -78,6 +78,9 @@ training %<>%
 testing %<>%
   select(-all_of(c(useless_columns, "new_window")))
 
+testing_describe_Hmisc <- Hmisc::describe(training)
+Hmisc::html(testing_describe_Hmisc)
+
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ##                      Testing for Linear Separability                     ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -100,7 +103,13 @@ training_pca_plot <- training_pca$x %>%
       colour = classe
     )
   ) + 
-  geom_point(alpha = 0.2)
+  geom_point(alpha = 0.2) +
+  labs(
+    title = "Principal Component Analysis of Predictor Variables",
+    subtitle = "First two primary components"
+  ) +
+  theme_minimal()
+
 
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ##                                                                            --
